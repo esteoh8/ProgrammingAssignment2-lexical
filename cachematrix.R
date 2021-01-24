@@ -28,15 +28,15 @@ makeCacheMatrix <- function(x = matrix()) {
 ## earlier.  If the cache is NULL, cacheSolve will solve() for the inverse, cache it and 
 ## return the inverseMatrix
 
-cacheSolve <- function(x, ...) {           # Return inverse of x
+cacheSolve <- function(x, ...) {           # Return inverse of x either from cache or solve() it
         
-  inverseMatrix <- x$getInverse()          # inverseMatrix was set to NULL initially by makeCacheMatrix
-  if(!is.null(inverseMatrix)) {            # so if not NULL, can just return the cached inverseMatrix
+  inverseMatrix <- x$getInverse()          # inverseMatrix = NULL, set by makeCacheMatrix
+  if(!is.null(inverseMatrix)) {            # so if not NULL, use the cached inverseMatrix
     message("getting the cached data")
     return(inverseMatrix)
   }
-  data <- x$get()                          # otherwise get the original matrix 
-  inverseMatrix <- solve(data, ...)        # compute the inverse and 
-  x$setInverse(inverseMatrix)              # cache it
-  inverseMatrix                            # don't forget to return the computed inverse  
+  tmp <- x$get()                           # if null (not cache), get matrix 
+  inverseMatrix <- solve(tmp, ...)         # solve() for the inverse matrix 
+  x$setInverse(inverseMatrix)              # save it to the cache it
+  inverseMatrix                            # and return the inverseMatrix 
 }
